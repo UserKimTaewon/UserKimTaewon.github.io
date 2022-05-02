@@ -5,7 +5,7 @@
 ```
 connecting to localhost:4224
 [Server]>enter your id
-[Client]>dankook
+[Client]>dankook0
 [Server]>existing user. enter your password
 [Client]>univ32
 [Server]>worng password, try again
@@ -93,10 +93,10 @@ class User:
     pwd:str
 
 users=[
-User('taewon','1234abc'),
-User('kimtaewon','password2'),
-User('user','password1234'),
-User('dankook','univ42'),
+User('taewon2','1234abc'),
+User('kimtaewon1','password2'),
+User('user32','password1234'),
+User('dankook0','univ42'),
 ]
 def get_user(id):
     for u in users:
@@ -140,6 +140,8 @@ def handle(conn):
                     send(conn,'password must contain more than 1 numlic charactor')
                 elif not any(map(str.isalpha,inp)):
                     send(conn,'password must contain more than 1 alphabet charactor')
+                elif len(inp)<=4:
+                    send(conn,'password must be longer than 4 charactor')
                 else:
                     break
                 inp=conn.recv(4096).decode(encoding=ENCODING)
