@@ -1,3 +1,2 @@
-# UserKimTaewon.github.io
-my blog
-[link](https://userkimtaewon.github.io/)
+# 페이지 대문
+[링크](https://userkimtaewon.github.io/)
