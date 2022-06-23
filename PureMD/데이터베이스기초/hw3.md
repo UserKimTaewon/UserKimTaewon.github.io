@@ -160,17 +160,85 @@ ORDER BY M.ENAME;
 | KING| CLARK|ACCOUNTING|
 |SCOTT| ADAMS|  RESEARCH|
 # 실습과제 2
+## 2. 연봉을 평균 이상 받는 사원들의 이름, 연봉, 근무지를 보이시오
+```sql
+SELECT ENAME,SAL,LOC
+FROM EMP,DEPT
+WHERE EMP.DEPTNO=DEPT.DEPTNO
+	AND EMP.SAL>=(SELECT AVG(SAL) FROM EMP);
 
 ```
+|ENAME|   SAL|     LOC|
+|-----|------|--------|
+|JONES|2975.0|  DALLAS|
+|BLAKE|2850.0| CHICAGO|
+|CLARK|2450.0|NEW YORK|
+|SCOTT|3000.0|  DALLAS|
+| KING|5000.0|NEW YORK|
+| FORD|3000.0|  DALLAS|
+## 3. 연봉을 가장 적게 받는 사원의 매니저는 누구인가? 
+```sql
+SELECT M.ENAME
+FROM EMP AS E,EMP AS M
+WHERE E.MGR=M.EMPNO AND E.SAL=(SELECT MIN(SAL) FROM EMP);
 
->>>--7. 연봉을 평균보다 500 이상 적게 받는 사원들의 이름, 부서명, 연봉을 보이시오
-...SELECT ENAME,DNAME,SAL
-...FROM EMP,DEPT
-...WHERE EMP.DEPTNO=DEPT.DEPTNO
-...	AND SAL<=(SELECT AVG(SAL) FROM EMP)-500;
-+------+----------+------+
+```
+|ENAME|
+|-----|
+| FORD|
+## 4. 연봉을 가장 많이 받는 사원과 적게 받는 사원의 이름, 연봉을 보이시오
+```sql
+SELECT ENAME,SAL
+FROM EMP
+WHERE SAL IN ((SELECT MAX(SAL) FROM EMP),(SELECT MIN(SAL) FROM EMP));
+
+```
+|ENAME|   SAL|
+|-----|------|
+|SMITH| 800.0|
+| KING|5000.0|
+## 5. 연봉을 가장 많이 받는 사원과 적게 받는 사원을 제외한 나머지 사원들의 총 연봉 합계를 보이시오
+```sql
+SELECT AVG(SAL)
+FROM EMP
+WHERE SAL NOT IN ((SELECT MAX(SAL) FROM EMP),(SELECT MIN(SAL) FROM EMP));
+
+```
+|          AVG(SAL)|
+|------------------|
+|1935.4166666666667|
+## 6. SALES 부서에 속한 사원들과 동일한 담당업무를 갖는 사원들의 이름, 담당업무를 보이시오 (단 SALES 부서에 속한 사원은 제외)
+```sql
+SELECT E.ENAME,E.JOB
+FROM EMP AS E
+WHERE E.JOB IN (
+	SELECT DISTINCT SALES.JOB
+	FROM EMP AS SALES
+	WHERE SALES.DEPTNO IN(
+  SELECT DEPTNO FROM DEPT WHERE DNAME='SALES'
+	)
+) AND E.DEPTNO NOT IN (
+	SELECT DEPTNO FROM DEPT WHERE DNAME='SALES'
+);
+
+```
+| ENAME|    JOB|
+|------|-------|
+| SMITH|  CLERK|
+| JONES|MANAGER|
+| CLARK|MANAGER|
+| ADAMS|  CLERK|
+|MILLER|  CLERK|
+## 7. 연봉을 평균보다 500 이상 적게 받는 사원들의 이름, 부서명, 연봉을 보이시오
+```sql
+SELECT ENAME,DNAME,SAL
+FROM EMP,DEPT
+WHERE EMP.DEPTNO=DEPT.DEPTNO
+	AND SAL<=(SELECT AVG(SAL) FROM EMP)-500;
+
+```
 | ENAME|     DNAME|   SAL|
-+------+----------+------+
+|------|----------|------|
 | SMITH|  RESEARCH| 800.0|
 |  WARD|     SALES|1250.0|
 |MARTIN|     SALES|1250.0|
@@ -178,18 +246,19 @@ ORDER BY M.ENAME;
 | ADAMS|  RESEARCH|1100.0|
 | JAMES|     SALES| 950.0|
 |MILLER|ACCOUNTING|1300.0|
-+------+----------+------+
->>>--8. JAMES 보다 입사일이 빠른 사원들의 이름, 담당업무, 입사일을 보이시오
-...SELECT ENAME,JOB,HIREDATE
-...FROM EMP
-...WHERE HIREDATE<(
-...	SELECT HIREDATE
-...	FROM EMP
-...	WHERE ENAME='JAMES'
-...);
-+------+---------+----------+
+## 8. JAMES 보다 입사일이 빠른 사원들의 이름, 담당업무, 입사일을 보이시오
+```sql
+SELECT ENAME,JOB,HIREDATE
+FROM EMP
+WHERE HIREDATE<(
+	SELECT HIREDATE
+	FROM EMP
+	WHERE ENAME='JAMES'
+);
+
+```
 | ENAME|      JOB|  HIREDATE|
-+------+---------+----------+
+|------|---------|----------|
 | SMITH|    CLERK|1980-12-17|
 | ALLEN| SALESMAN|1981-02-20|
 |  WARD| SALESMAN|1981-02-22|
@@ -199,19 +268,17 @@ ORDER BY M.ENAME;
 | CLARK|  MANAGER|1981-06-09|
 |  KING|PRESIDENT|1981-11-17|
 |TURNER| SALESMAN|1981-08-08|
-+------+---------+----------+
->>>--9. ADAMS 보다 연봉을 많이 받는 사람은 모두 몇명인가
-...SELECT COUNT(E.EMPNO)
-...FROM EMP AS ADAMS,EMP AS E
-...WHERE ADAMS.ENAME='ADAMS' AND E.SAL>ADAMS.SAL
-...GROUP BY ADAMS.EMPNO;
-+--------------+
-|COUNT(E.EMPNO)|
-+--------------+
-|            11|
-+--------------+
-```
+## 9. ADAMS 보다 연봉을 많이 받는 사람은 모두 몇명인가
+```sql
+SELECT COUNT(E.EMPNO)
+FROM EMP AS ADAMS,EMP AS E
+WHERE ADAMS.ENAME='ADAMS' AND E.SAL>ADAMS.SAL
+GROUP BY ADAMS.EMPNO;
 
+```
+|COUNT(E.EMPNO)|
+|--------------|
+|            11|
 # 소스코드
 ## shell.py
 ```python
