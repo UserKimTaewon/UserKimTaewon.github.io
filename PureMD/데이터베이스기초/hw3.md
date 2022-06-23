@@ -87,8 +87,8 @@ SELECT M.ENAME,COUNT(E.EMPNO)
 FROM EMP AS M,EMP AS E
 WHERE M.EMPNO=E.MGR
 GROUP BY M.EMPNO;
-
 ```
+
 |ENAME|COUNT(E.EMPNO)|
 |-----|--------------|
 |JONES|             2|
@@ -97,19 +97,21 @@ GROUP BY M.EMPNO;
 |SCOTT|             1|
 | KING|             3|
 | FORD|             1|
+
 ## 6. 각 지역별로 근무하는 사원들의 연봉 합계를 보이시오 (지역명, 연봉합계)
 ```sql
 SELECT D.LOC,SUM(E.SAL)
 FROM EMP AS E,DEPT AS D
 WHERE E.DEPTNO=D.DEPTNO
 GROUP BY D.LOC;
-
 ```
+
 |     LOC|SUM(E.SAL)|
 |--------|----------|
 | CHICAGO|    9400.0|
 |  DALLAS|   10875.0|
 |NEW YORK|    8750.0|
+
 ## 7. 매니저가 아닌 (부하직원이 없는) 사원들은 몇 명인가?
 ```sql
 SELECT COUNT(*)
@@ -118,11 +120,12 @@ WHERE NOT EXISTS(
 SELECT *FROM EMP AS E
 WHERE E.MGR=M.EMPNO
 );
-
 ```
+
 |COUNT(*)|
 |--------|
 |       8|
+
 ## 8. 매니저가 아닌 (부하직원이 없는) 사원들의 연봉합계는 얼마인가
 ```sql
 SELECT SUM(M.SAL)
@@ -131,19 +134,20 @@ WHERE NOT EXISTS(
 SELECT *FROM EMP AS E
 WHERE E.MGR=M.EMPNO
 );
-
 ```
+
 |SUM(M.SAL)|
 |----------|
 |    9750.0|
+
 ## 9. 매니저이름, 부하직원이름, 부서명 을 보이시오 (매니저이름으로 정렬)
 ```sql
 SELECT M.ENAME,E.ENAME,D.DNAME
 FROM EMP AS M,EMP AS E,DEPT AS D
 WHERE M.EMPNO=E.MGR AND M.DEPTNO=D.DEPTNO
 ORDER BY M.ENAME;
-
 ```
+
 |ENAME| ENAME|     DNAME|
 |-----|------|----------|
 |BLAKE| ALLEN|     SALES|
@@ -159,6 +163,7 @@ ORDER BY M.ENAME;
 | KING| BLAKE|ACCOUNTING|
 | KING| CLARK|ACCOUNTING|
 |SCOTT| ADAMS|  RESEARCH|
+
 # 실습과제 2
 ## 2. 연봉을 평균 이상 받는 사원들의 이름, 연봉, 근무지를 보이시오
 ```sql
@@ -166,8 +171,8 @@ SELECT ENAME,SAL,LOC
 FROM EMP,DEPT
 WHERE EMP.DEPTNO=DEPT.DEPTNO
 	AND EMP.SAL>=(SELECT AVG(SAL) FROM EMP);
-
 ```
+
 |ENAME|   SAL|     LOC|
 |-----|------|--------|
 |JONES|2975.0|  DALLAS|
@@ -176,37 +181,41 @@ WHERE EMP.DEPTNO=DEPT.DEPTNO
 |SCOTT|3000.0|  DALLAS|
 | KING|5000.0|NEW YORK|
 | FORD|3000.0|  DALLAS|
+
 ## 3. 연봉을 가장 적게 받는 사원의 매니저는 누구인가? 
 ```sql
 SELECT M.ENAME
 FROM EMP AS E,EMP AS M
 WHERE E.MGR=M.EMPNO AND E.SAL=(SELECT MIN(SAL) FROM EMP);
-
 ```
+
 |ENAME|
 |-----|
 | FORD|
+
 ## 4. 연봉을 가장 많이 받는 사원과 적게 받는 사원의 이름, 연봉을 보이시오
 ```sql
 SELECT ENAME,SAL
 FROM EMP
 WHERE SAL IN ((SELECT MAX(SAL) FROM EMP),(SELECT MIN(SAL) FROM EMP));
-
 ```
+
 |ENAME|   SAL|
 |-----|------|
 |SMITH| 800.0|
 | KING|5000.0|
+
 ## 5. 연봉을 가장 많이 받는 사원과 적게 받는 사원을 제외한 나머지 사원들의 총 연봉 합계를 보이시오
 ```sql
 SELECT AVG(SAL)
 FROM EMP
 WHERE SAL NOT IN ((SELECT MAX(SAL) FROM EMP),(SELECT MIN(SAL) FROM EMP));
-
 ```
+
 |          AVG(SAL)|
 |------------------|
 |1935.4166666666667|
+
 ## 6. SALES 부서에 속한 사원들과 동일한 담당업무를 갖는 사원들의 이름, 담당업무를 보이시오 (단 SALES 부서에 속한 사원은 제외)
 ```sql
 SELECT E.ENAME,E.JOB
@@ -220,8 +229,8 @@ WHERE E.JOB IN (
 ) AND E.DEPTNO NOT IN (
 	SELECT DEPTNO FROM DEPT WHERE DNAME='SALES'
 );
-
 ```
+
 | ENAME|    JOB|
 |------|-------|
 | SMITH|  CLERK|
@@ -229,14 +238,15 @@ WHERE E.JOB IN (
 | CLARK|MANAGER|
 | ADAMS|  CLERK|
 |MILLER|  CLERK|
+
 ## 7. 연봉을 평균보다 500 이상 적게 받는 사원들의 이름, 부서명, 연봉을 보이시오
 ```sql
 SELECT ENAME,DNAME,SAL
 FROM EMP,DEPT
 WHERE EMP.DEPTNO=DEPT.DEPTNO
 	AND SAL<=(SELECT AVG(SAL) FROM EMP)-500;
-
 ```
+
 | ENAME|     DNAME|   SAL|
 |------|----------|------|
 | SMITH|  RESEARCH| 800.0|
@@ -246,6 +256,7 @@ WHERE EMP.DEPTNO=DEPT.DEPTNO
 | ADAMS|  RESEARCH|1100.0|
 | JAMES|     SALES| 950.0|
 |MILLER|ACCOUNTING|1300.0|
+
 ## 8. JAMES 보다 입사일이 빠른 사원들의 이름, 담당업무, 입사일을 보이시오
 ```sql
 SELECT ENAME,JOB,HIREDATE
@@ -255,8 +266,8 @@ WHERE HIREDATE<(
 	FROM EMP
 	WHERE ENAME='JAMES'
 );
-
 ```
+
 | ENAME|      JOB|  HIREDATE|
 |------|---------|----------|
 | SMITH|    CLERK|1980-12-17|
@@ -268,17 +279,19 @@ WHERE HIREDATE<(
 | CLARK|  MANAGER|1981-06-09|
 |  KING|PRESIDENT|1981-11-17|
 |TURNER| SALESMAN|1981-08-08|
+
 ## 9. ADAMS 보다 연봉을 많이 받는 사람은 모두 몇명인가
 ```sql
 SELECT COUNT(E.EMPNO)
 FROM EMP AS ADAMS,EMP AS E
 WHERE ADAMS.ENAME='ADAMS' AND E.SAL>ADAMS.SAL
 GROUP BY ADAMS.EMPNO;
-
 ```
+
 |COUNT(E.EMPNO)|
 |--------------|
 |            11|
+
 # 소스코드
 ## shell.py
 ```python
