@@ -291,6 +291,80 @@ GROUP BY ADAMS.EMPNO;
 |COUNT(E.EMPNO)|
 |--------------|
 |            11|
+# 실습과제 3
+## 3. SCOTT 보다 연봉을 많이 받는 사람들 중에서 SCOTT 와 연봉이 비슷한 사람 3명의 이름, 부서명, 연봉을 보이시오
+```sql
+SELECT ENAME,DNAME,SAL
+FROM EMP,DEPT
+WHERE EMP.DEPTNO=DEPT.DEPTNO
+	AND SAL>(SELECT SAL FROM EMP WHERE ENAME='SCOTT')
+ORDER BY SAL
+LIMIT 3;
+```
+
+|ENAME|     DNAME|   SAL|
+|-----|----------|------|
+| KING|ACCOUNTING|5000.0|
+
+SCOTT 보다 연봉을 많이 받는 사람이 단 1명 뿐이었다.
+
+## 4.BLAKE 보다 입사일이 늦은 사람들 중에서 상위 2명을 제외하고 3명의 이름, 부서명, 입사일자를 보이시오 (입사일자가 빠른순으로)
+```sql
+SELECT ENAME,DNAME,HIREDATE
+FROM EMP,DEPT
+WHERE EMP.DEPTNO=DEPT.DEPTNO
+	AND HIREDATE>(SELECT HIREDATE FROM EMP WHERE ENAME='BLAKE')
+ORDER BY HIREDATE
+LIMIT 2,3;
+```
+
+| ENAME|     DNAME|  HIREDATE|
+|------|----------|----------|
+|MARTIN|     SALES|1981-08-28|
+|  KING|ACCOUNTING|1981-11-17|
+| JAMES|     SALES|1981-12-03|
+
+## 5.연봉금액이 SMITH 와 FORD 사이인 사원의 이름, 연봉을 보이시오. (단 SMITH 와 FORD 는 누가 더연봉을 많이 받는지 알 수 없다) 
+```sql
+SELECT E.ENAME,E.SAL
+FROM EMP AS E
+WHERE E.SAL BETWEEN (SELECT MIN(SAL) FROM EMP
+	WHERE ENAME IN ('FORD','SMITH')
+) AND (SELECT MAX(SAL) FROM EMP
+	WHERE ENAME IN ('FORD','SMITH')
+);
+```
+
+| ENAME|   SAL|
+|------|------|
+| SMITH| 800.0|
+| ALLEN|1600.0|
+|  WARD|1250.0|
+| JONES|2975.0|
+|MARTIN|1250.0|
+| BLAKE|2850.0|
+| CLARK|2450.0|
+| SCOTT|3000.0|
+|TURNER|1500.0|
+| ADAMS|1100.0|
+| JAMES| 950.0|
+|  FORD|3000.0|
+|MILLER|1300.0|
+
+## 6.소속된 사원의 연봉 총액이 많은 상위 2개의 부서의 이름과, 연봉 총액을 보이시오
+```sql
+SELECT DNAME,SUM(SAL)
+FROM DEPT,EMP
+WHERE EMP.DEPTNO=DEPT.DEPTNO
+GROUP BY DEPT.DEPTNO
+ORDER BY SUM(SAL) DESC
+LIMIT 2;
+```
+
+|   DNAME|SUM(SAL)|
+|--------|--------|
+|RESEARCH| 10875.0|
+|   SALES|  9400.0|
 
 # 소스코드
 ## shell.py
