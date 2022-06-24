@@ -19,4 +19,4 @@
 - [ER 다이어그램 작성(작성중)](hw2.md)
 - [SQL 과제](hw3.md)
 # 기타
-- [sqlite에 대한 잡담](etc1.md)
+- [sqlite에 대한 잡담](etc.1.md)
