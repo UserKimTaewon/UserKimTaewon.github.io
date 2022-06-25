@@ -1,6 +1,11 @@
+\\<-- !5장 네트워크 레이어 -->
+# 네트워크 계층.control plane
 
-네트워크 계층.control plane
-===
+\\<-- ! -->
+
+
+
+
 라우터 관리하는 거.
 
 각각의 라우터-레벨에서 돌거나
@@ -604,6 +609,198 @@ iBGP는 게이트웨이가 자기 소속 AS의 라우터들에게 할 일.
 eBGP는 어디로 가야 외부-연결이 되는지를 확인하고
 
 iBGP는 그걸 내부의 라우터들에게 알리고.
+
+
+
+
+
+# the SDN control plane
+
+ip 계층의 라우팅..?
+
+
+
+road balancing이 문제가 생김...?
+
+- 적당히 트래픽을 나눠 보낼 필요가..?
+
+
+
+기존엔 control/data plane이 분리 안됨..?
+
+
+
+이제는 네트워크 관리자가 패킷의 흐름을 제어할 수 잇게 함.
+
+중앙 remote control plane이 각 라우터의 forwarding table을 관리함.
+
+
+
+## 왜 logically centrazed control plane?
+
+네트워크 관리가 수월
+
+유연성
+
+상황에 따른 유연성
+
+programming routers..?
+
+>OpenFlow API?
+
+- distributed면 각 라우터 update 하는게 좀 힘듦...
+
+- 하지만 중앙이면 중앙-서버만 update하면 새 라우팅 알고리듬 ㄱㄴ!
+
+기존에는 라우터-제조-화사가 다 관리했다면
+
+이제는 programm 가능.
+
+
+
+### 비유-mainframe to personal
+
+컴퓨터도 mainframe 시절에는 폐쇠적이었지만
+
+PC 시대가 오면서 open,호환성,...
+
+
+
+각 라우터가 정보를 모아서
+
+위의 서버에 보냄.
+
+그거 갖고 라우팅 테이블 만들어서
+
+아래 라우터들에게 보냄.
+
+
+
+### generalized forwarding?
+
+기존
+
+- 목적지 기반 forwarding?
+
+- ip 주소만 갖고 결정
+
+
+
+이제는 헤더의 여러 정보를 검토해서 포워딩함.
+
+
+
+이제 flow table.
+
+SDN이 계산해준거 사용.
+
+### sdn 관점
+
+상위 network control app
+
+- 이 사이에 northbound API?
+
+SDN controlser
+
+- 이 사이에 southbound
+
+### sdn.controler.일?
+
+interface layer
+
+- network graph/RESTful/indent...
+
+- 사용자에게 보이기 위한.
+
+network-side state management layer
+
+- flow table manage가 여기에서.
+
+- 각종 정보 처리도 여기서.
+
+communication layer
+
+- OpenFlow/SNMP
+
+- 라우터랑 통신하는 계층
+
+### openflow protocol
+
+tcp/tsl?
+
+- 보안 기능 내장.
+
+
+
+메세지 종류?
+
+- controller-to-switch
+
+	- 동기적. 잘 받았다고 응답 기다리기.
+
+- switch-to-controler
+
+	- 비동기적. 잘 받던 못받던 기다릴 필요 없음.
+
+- 기타...
+
+
+
+#### controler-to-switch
+
+스위치를 관리.
+
+설정 관리,
+
+state를 add/delete?
+
+packet-out?
+
+- 컨트롤러가 '이 패킷을 이 경로로 보내라'고 할수도..?
+
+- 아니면 특정 패킷을 특정 스위치로..?
+
+- 아니면 이 패킷을 그 스위치에서 보내라?
+
+
+
+#### switch-to-controler
+
+packet-in?
+
+패킷을 아예 컨트롤러에 올리기..?
+
+flow-removed
+
+port status
+
+이제 저 사용자-api에서
+
+다익스트라를 쓰던, 자기네 알고리듬을 쓰던.
+
+
+
+### Openflow::flow table.entry?
+
+#### 구조
+
+rule
+
+- 대상 패킷 지정.
+
+- port,mac src/dst,ip addr 등...
+
+action
+
+- forward packet to port/drop/modify field/....
+
+stats
+
+- 말 그대로 통계.
+
+
+
+
 
 
 
