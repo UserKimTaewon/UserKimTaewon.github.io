@@ -5,6 +5,7 @@
 - [4장](summery.md)
 - [4.5장](summery2.md)
 - [5장](summery3.md)
+- [5.5장](summery4.md)
 # 날짜별 강의 노트들
 - [3차시](3.md)  
 - [4차시](4.md)  
