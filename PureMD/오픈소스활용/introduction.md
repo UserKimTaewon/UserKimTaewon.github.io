@@ -50,7 +50,7 @@
 - c
 ## 관심이 있는 언어
 - rust
+- julia
 - erlang
 - scala
 - haskell
-- c++
