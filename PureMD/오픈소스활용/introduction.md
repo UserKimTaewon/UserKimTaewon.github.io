@@ -1,5 +1,3 @@
-[블로그로 돌아가기](/README.md)
-
 자기소개
 ===
 # 신분
@@ -56,3 +54,5 @@
 - erlang
 - scala
 - haskell
+
+[블로그로 돌아가기↲](/README.md)
