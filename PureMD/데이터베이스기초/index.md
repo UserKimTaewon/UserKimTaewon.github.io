@@ -24,3 +24,5 @@
 - [SQL 과제](hw3.md)
 # 기타
 - [sqlite에 대한 잡담](etc.1.md)
+
+[블로그로 돌아가기↲](/README.md)
