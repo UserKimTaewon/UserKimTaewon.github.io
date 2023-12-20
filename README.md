@@ -6,3 +6,5 @@
 - [데이터베이스기초](/PureMD/데이터베이스기초/index.md)  
 # 자기소개
 [링크](/PureMD/오픈소스활용/introduction.md)
+# 기타
+- [devops?](/PureMD/Generic/about_devops.md)
